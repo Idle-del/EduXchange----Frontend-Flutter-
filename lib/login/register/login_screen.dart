@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print
 
+import 'package:edu_xchange/login/register/register_screen.dart';
 import 'package:edu_xchange/services/auth_service.dart';
 import 'package:edu_xchange/screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   bool _isLoading = false;
 
+  bool _isVisible = false;
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -33,7 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isPassword,
     Icon icon,
     bool isDarkMode,
-    String? Function(String?) validator
+    Widget? suffixIcon,
+    String? Function(String?) validator,
+
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,10 +51,11 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: TextFormField(
             controller: controller,
-            obscureText: isPassword,
+            obscureText: isPassword ? !_isVisible : false,
             decoration: InputDecoration(
               prefixIcon: icon,
               labelText: label,
+              suffixIcon: suffixIcon,
               border: InputBorder.none,
             ),
             validator: validator,
@@ -59,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _login() async {
+  void login() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
@@ -114,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   false,
                   const Icon(Icons.email_outlined),
                   isDarkMode,
+                  null,
                   (val) {
                     if (val == null || val.isEmpty) {
                       return 'Email is required';
@@ -124,8 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       return 'Please enter a valid email address';
                     }
                     return null;
-                  }
+                  } // No suffix icon for email field
                 ),
+                
                 const SizedBox(height: 16),
 
                 // Password field
@@ -135,6 +143,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   true,
                   const Icon(Icons.lock_outline),
                   isDarkMode,
+                  IconButton(
+                    icon: Icon(
+                      _isVisible ? Icons.visibility : Icons.visibility_off,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isVisible = !_isVisible;
+                      });
+                    },
+                  ),
                   (val) {
                     if (val == null || val.isEmpty) {
                       return 'Password is required';
@@ -152,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // onPressed: _isLoading ? null : _login,
                   onPressed: () {
                     if (!_isLoading) {
-                      _login();
+                      login();
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -169,6 +187,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       : const Text('Log In', style: TextStyle(fontSize: 16)),
                 ),
+                const SizedBox(height: 16),
+
+                TextButton(
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const RegisterScreen())),
+                  child: const Text('Don\'t have an account? Sign Up'),
+                )
               ],
             ),
           ),
