@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:edu_xchange/config/api_constants.dart';
+import 'package:edu_xchange/services/token_servce.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,9 +55,7 @@ class AuthService {
 
       String responseBody = await response.stream.bytesToString();
 
-      print(
-        'Registration response: ${response.statusCode}\n$responseBody',
-      );
+      print('Registration response: ${response.statusCode}\n$responseBody');
 
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
@@ -71,19 +70,17 @@ class AuthService {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
       final json = jsonDecode(response.body);
 
       if (response.statusCode == 200 && json['access'] != null) {
+        final tokenService = TokenService();
         final prefs = await SharedPreferences.getInstance();
 
-        await prefs.setString('jwt_token', json['access']);
-        await prefs.setString('refresh_token', json['refresh']);
+        await tokenService.saveTokens(json['access'], json['refresh']);
+
         await prefs.setInt('user_id', json['id']);
         await prefs.setString('user_email', json['email']);
         await prefs.setString('first_name', json['first_name']);
@@ -91,6 +88,9 @@ class AuthService {
         await prefs.setString('bio', json['bio'] ?? '');
         await prefs.setString('department', json['department'] ?? '');
         await prefs.setInt('semester', json['semester'] ?? 0);
+
+        // print(await prefs.getString("access"));
+        // print(await prefs.getString("refresh"));
 
         return true;
       }
