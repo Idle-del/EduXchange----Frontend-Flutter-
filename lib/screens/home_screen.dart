@@ -1,169 +1,9 @@
-// import 'package:edu_xchange/controller/theme_controller.dart';
-// import 'package:edu_xchange/model/resource_model.dart';
-// import 'package:edu_xchange/screens/resource_detail_screen.dart';
-// import 'package:edu_xchange/services/resources_service.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+// ignore_for_file: deprecated_member_use
 
-// class HomeScreen extends StatefulWidget {
-//   const HomeScreen({super.key});
-
-//   @override
-//   State<HomeScreen> createState() => _HomeScreenState();
-// }
-
-// class _HomeScreenState extends State<HomeScreen> {
-//   final ResourceService _resourceService = ResourceService();
-
-//   List<Resource> _resources = [];
-//   bool isLoading = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     loadResources();
-//   }
-
-//   Future<void> loadResources() async {
-//     setState(() => isLoading = true);
-//     try {
-//       final resources = await _resourceService.fetchResources();
-//       print("Resources count: ${resources.length}");
-//       setState(() {
-//         _resources = resources;
-//         isLoading = false;
-//       });
-//     } catch (e) {
-//       setState(() => isLoading = false);
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final isDark = Theme.of(context).brightness == Brightness.dark;
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text("EduXchange"),
-//         actions: [
-//           GetBuilder<ThemeController>(
-//             builder: (controller) {
-//               return IconButton(
-//                 onPressed: () {
-//                   controller.toggleTheme();
-//                 },
-//                 icon: Icon(isDark ? Icons.wb_sunny : Icons.nightlight_round),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-
-//       body: isLoading
-//           ? const Center(child: CircularProgressIndicator())
-//           : ListView.builder(
-//               padding: const EdgeInsets.all(16),
-//               itemCount: _resources.length,
-//               itemBuilder: (context, index) {
-//                 final resource = _resources[index];
-
-//                 return Card(
-//                   shape: RoundedRectangleBorder(
-//                     borderRadius: BorderRadius.circular(12),
-//                   ),
-//                   child: InkWell(
-//                     borderRadius: BorderRadius.circular(12),
-//                     onTap: () {
-//                       Navigator.push(
-//                         context,
-//                         MaterialPageRoute(
-//                           builder: (_) =>
-//                               ResourceDetailScreen(resourceId: resource.id),
-//                         ),
-//                       );
-//                     },
-//                     child: Card(
-//                       margin: const EdgeInsets.only(bottom: 16),
-//                       elevation: 3,
-//                       shape: RoundedRectangleBorder(
-//                         borderRadius: BorderRadius.circular(12),
-//                       ),
-//                       child: Padding(
-//                         padding: const EdgeInsets.all(12),
-//                         child: Row(
-//                           children: [
-//                             /// Image
-//                             ClipRRect(
-//                               borderRadius: BorderRadius.circular(8),
-//                               child: resource.image != null
-//                                   ? Image.network(
-//                                       resource.image!,
-//                                       width: 90,
-//                                       height: 90,
-//                                       fit: BoxFit.cover,
-//                                     )
-//                                   : const SizedBox(
-//                                       width: 90,
-//                                       height: 90,
-//                                       child: Icon(Icons.image),
-//                                     ),
-//                             ),
-
-//                             const SizedBox(width: 15),
-
-//                             /// Details
-//                             Expanded(
-//                               child: Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                                   Text(
-//                                     resource.title,
-//                                     style: const TextStyle(
-//                                       fontSize: 18,
-//                                       fontWeight: FontWeight.bold,
-//                                     ),
-//                                   ),
-
-//                                   const SizedBox(height: 6),
-
-//                                   Text(resource.categoryName),
-
-//                                   const SizedBox(height: 4),
-
-//                                   Text("By ${resource.uploadedByName}"),
-
-//                                   const SizedBox(height: 4),
-
-//                                   Text("Type: ${resource.type}"),
-
-//                                   const SizedBox(height: 4),
-
-//                                   Text(
-//                                     "Rs. ${resource.price}",
-//                                     style: const TextStyle(
-//                                       fontWeight: FontWeight.bold,
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                             ),
-//                           ],
-//                         ),
-//                       ),
-//                     ),
-//                   ),
-//                 );
-//               },
-//             ),
-//     );
-//   }
-// }
-
-import 'package:edu_xchange/controller/theme_controller.dart';
 import 'package:edu_xchange/model/resource_model.dart';
 import 'package:edu_xchange/screens/resource_detail_screen.dart';
 import 'package:edu_xchange/services/resources_service.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -320,30 +160,16 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: isDark ? const Color(0xFF0E1420) : Colors.white,
         elevation: 0,
-        title: Text(
-          "EduXchange",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.3,
-            color: isDark ? Colors.white : _primaryColor,
+        title: Center(
+          child: Text(
+            "EduXchange",
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 0.3,
+              color: isDark ? Colors.white : _primaryColor,
+            ),
           ),
         ),
-        actions: [
-          GetBuilder<ThemeController>(
-            builder: (controller) {
-              return IconButton(
-                onPressed: () {
-                  controller.toggleTheme();
-                },
-                icon: Icon(
-                  isDark ? Icons.wb_sunny_outlined : Icons.nightlight_round,
-                  color: isDark ? Colors.white : _primaryColor,
-                ),
-              );
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
       ),
 
       body: isLoading

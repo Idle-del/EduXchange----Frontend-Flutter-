@@ -19,10 +19,10 @@ class ResourceService {
         url,
         headers: {"Authorization": "Bearer $token"},
       );
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
       if (response.statusCode == 200) {
-        print('Resources fetched successfully: ${response.body}');
+        // print('Resources fetched successfully: ${response.body}');
         final jsonData = jsonDecode(response.body);
 
         return (jsonData['results'] as List)
@@ -32,7 +32,7 @@ class ResourceService {
         throw Exception('Failed to load resources');
       }
     } catch (e) {
-      print('Error fetching resources: ${e.toString()}');
+      // print('Error fetching resources: ${e.toString()}');
       return [];
     }
   }

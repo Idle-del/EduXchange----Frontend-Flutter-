@@ -1,3 +1,4 @@
+import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/login/register/login_screen.dart';
 import 'package:edu_xchange/utils/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ void main() async{
 
   await GetStorage.init();
   Get.put(ThemeController());
+  Get.put(NavigationController());
   runApp(const MyApp());
 }
 
@@ -22,7 +24,11 @@ class MyApp extends StatelessWidget {
     final themeController = Get.find<ThemeController>();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const LoginScreen(),
+      initialRoute: '/login',
+      getPages: [
+        GetPage(name: '/login', page: () => const LoginScreen()),
+        // Add other routes here
+      ],
       theme: AppThemes.lightTheme,
       darkTheme: AppThemes.darkTheme,
       themeMode: themeController.theme,

@@ -1,8 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
 
 import 'package:edu_xchange/login/register/register_screen.dart';
+import 'package:edu_xchange/screens/main_screen.dart';
 import 'package:edu_xchange/services/auth_service.dart';
-import 'package:edu_xchange/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (success) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const MainScreen()),
       );
     } else {
       ScaffoldMessenger.of(
