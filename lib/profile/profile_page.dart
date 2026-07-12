@@ -3,8 +3,9 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/controller/theme_controller.dart';
 import 'package:edu_xchange/model/user_model.dart';
+import 'package:edu_xchange/profile/profile_edit.dart';
 import 'package:edu_xchange/services/profile_service.dart';
-import 'package:edu_xchange/services/token_servce.dart';
+import 'package:edu_xchange/services/token_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,7 +62,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildDetailTile(IconData icon, String label, String value, bool isDark) {
+  Widget _buildDetailTile(
+    IconData icon,
+    String label,
+    String value,
+    bool isDark,
+  ) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 10),
@@ -119,7 +125,9 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0E1420) : const Color(0xFFF4F6F9),
+      backgroundColor: isDark
+          ? const Color(0xFF0E1420)
+          : const Color(0xFFF4F6F9),
       appBar: AppBar(
         backgroundColor: isDark ? const Color(0xFF0E1420) : Colors.white,
         elevation: 0,
@@ -167,7 +175,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 28,
+                      horizontal: 20,
+                    ),
                     decoration: BoxDecoration(
                       color: isDark ? const Color(0xFF161D2B) : Colors.white,
                       borderRadius: BorderRadius.circular(18),
@@ -183,13 +194,19 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 50,
-                          backgroundColor: _primaryColor.withOpacity(isDark ? 0.18 : 0.08),
+                          backgroundColor: _primaryColor.withOpacity(
+                            isDark ? 0.18 : 0.08,
+                          ),
                           backgroundImage:
                               userProfile?.profilePicture?.isNotEmpty == true
                               ? NetworkImage(userProfile!.profilePicture!)
                               : null,
                           child: userProfile?.profilePicture == null
-                              ? const Icon(Icons.person, size: 50, color: _primaryColor)
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 50,
+                                  color: _primaryColor,
+                                )
                               : null,
                         ),
                         const SizedBox(height: 14),
@@ -223,8 +240,15 @@ class _ProfilePageState extends State<ProfilePage> {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton.icon(
-                            onPressed: () {
-                              // Navigate to the edit profile page
+                            onPressed: () async {
+                              final updated = await Get.to(
+                                () => const ProfileEdit(),
+                                arguments: userProfile,
+                              );
+
+                              if (updated == true) {
+                                _loadUserProfile();
+                              }
                             },
                             icon: const Icon(Icons.edit_outlined, size: 18),
                             label: const Text(
@@ -260,7 +284,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   _buildDetailTile(
                     Icons.school_outlined,
                     'Semester',
-                    '${userProfile?.semesterName ?? 'N/A'}',
+                    userProfile?.semesterName ?? 'N/A',
                     isDark,
                   ),
 

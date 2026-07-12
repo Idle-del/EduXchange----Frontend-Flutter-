@@ -1,7 +1,8 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/login/register/login_screen.dart';
+import 'package:edu_xchange/profile/profile_edit.dart';
 import 'package:edu_xchange/screens/main_screen.dart';
-import 'package:edu_xchange/services/token_servce.dart';
+import 'package:edu_xchange/services/token_service.dart';
 import 'package:edu_xchange/utils/app_themes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
       initialRoute:isLoggedIn ? '/main' : '/login',
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
-        GetPage(name: '/main', page: () => const MainScreen())
+        GetPage(name: '/main', page: () => const MainScreen()),
+        GetPage(name: '/profile/edit', page: () => const ProfileEdit()),
         // Add other routes here
       ],
       theme: AppThemes.lightTheme,

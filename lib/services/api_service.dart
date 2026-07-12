@@ -1,4 +1,4 @@
-import 'package:edu_xchange/services/token_servce.dart';
+import 'package:edu_xchange/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {

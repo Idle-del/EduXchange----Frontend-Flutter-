@@ -4,7 +4,8 @@ class UserProfile {
   final String lastName;
   final String? bio;
   final String? department;
-  final int? semesterName;
+  final int? semester;
+  final String? semesterName;
   final String? profilePicture;
 
   UserProfile({
@@ -13,6 +14,7 @@ class UserProfile {
     required this.lastName,
     required this.bio,
     required this.department,
+    required this.semester,
     required this.semesterName,
     required this.profilePicture,
   });
@@ -24,6 +26,7 @@ class UserProfile {
       lastName: json['last_name'],
       bio: json['bio'],
       department: json['department'],
+      semester: json['semester'],
       semesterName: json['semester_name'],
       profilePicture: json['profile_picture'],
     );
