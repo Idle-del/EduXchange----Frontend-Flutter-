@@ -6,6 +6,8 @@ import 'package:edu_xchange/login/register/login_screen.dart';
 import 'package:edu_xchange/services/auth_service.dart';
 import 'package:edu_xchange/services/semester_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Registration successful! Please verify your email before logging in.")));
-      Navigator.pop(context);
+      Get.offNamed('/login');
     } else {
       ScaffoldMessenger.of(
         context,
