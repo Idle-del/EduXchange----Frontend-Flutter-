@@ -10,13 +10,11 @@ class CategoryService {
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
-        print('Categories fetched successfully: ${response.body}');
         return jsonDecode(response.body);
       } else {
         throw Exception('Failed to load categories');
       }
     } catch (e) {
-      print('Error fetching categories: ${e.toString()}');
       return [];
     }
   }

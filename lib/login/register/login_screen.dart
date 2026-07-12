@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, deprecated_member_use
+// ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:edu_xchange/login/register/register_screen.dart';
 import 'package:edu_xchange/screens/main_screen.dart';

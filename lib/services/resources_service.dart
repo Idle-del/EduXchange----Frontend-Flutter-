@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/model/resource_model.dart';
-import 'package:edu_xchange/services/token_servce.dart';
+import 'package:edu_xchange/services/api_service.dart';
 import 'package:http/http.dart' as http;
 
 class ResourceService {
@@ -9,20 +9,10 @@ class ResourceService {
 
   Future<List<Resource>> fetchResources() async {
     final url = Uri.parse('$baseUrl/resources/');
-    final token = await TokenService().getAccessToken();
-
-    print('Fetching resources with token: $token');
-    print({"Authorization": "Bearer $token"});
 
     try {
-      final response = await http.get(
-        url,
-        headers: {"Authorization": "Bearer $token"},
-      );
-      // print('Response status: ${response.statusCode}');
-      // print('Response body: ${response.body}');
+      final response = await ApiService().get(url);
       if (response.statusCode == 200) {
-        // print('Resources fetched successfully: ${response.body}');
         final jsonData = jsonDecode(response.body);
 
         return (jsonData['results'] as List)
@@ -32,7 +22,6 @@ class ResourceService {
         throw Exception('Failed to load resources');
       }
     } catch (e) {
-      // print('Error fetching resources: ${e.toString()}');
       return [];
     }
   }

@@ -56,8 +56,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         isSemestersLoading = false;
       });
     } catch (e) {
-      print('Error loading semesters: $e');
-
       setState(() {
         isSemestersLoading = false;
       });
@@ -110,10 +108,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (success) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text("Registration successful")));
+      ).showSnackBar(SnackBar(content: Text("Registration successful! Please verify your email before logging in.")));
       Navigator.pop(context);
     } else {
-      print('Registration failed');
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Registration failed")));

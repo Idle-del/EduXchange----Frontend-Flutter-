@@ -1,5 +1,3 @@
-// ignore_for_file: avoid_print
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:edu_xchange/config/api_constants.dart';
@@ -53,13 +51,8 @@ class AuthService {
 
       var response = await request.send();
 
-      String responseBody = await response.stream.bytesToString();
-
-      print('Registration response: ${response.statusCode}\n$responseBody');
-
       return response.statusCode == 201 || response.statusCode == 200;
     } catch (e) {
-      print('Registration error: $e');
       return false;
     }
   }
@@ -89,15 +82,11 @@ class AuthService {
         await prefs.setString('department', json['department'] ?? '');
         await prefs.setInt('semester', json['semester'] ?? 0);
 
-        // print(await prefs.getString("access"));
-        // print(await prefs.getString("refresh"));
-
         return true;
       }
 
       return false;
     } catch (e) {
-      print('Login error: $e');
       return false;
     }
   }

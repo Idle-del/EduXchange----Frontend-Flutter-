@@ -8,13 +8,11 @@ class SemesterService {
     try {
       final response = await http.get(url);
     if (response.statusCode == 200) {
-      print('Semesters fetched successfully: ${response.body}');
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load semesters');
     }
     } catch (e) {
-      print('Error fetching semesters: ${e.toString()}');
       return [];
     }
   }

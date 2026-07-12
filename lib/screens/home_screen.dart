@@ -32,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => isLoading = true);
     try {
       final resources = await _resourceService.fetchResources();
-      print("Resources count: ${resources.length}");
       setState(() {
         _resources = resources;
         isLoading = false;
