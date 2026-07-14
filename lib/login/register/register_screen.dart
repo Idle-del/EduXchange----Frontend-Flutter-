@@ -475,8 +475,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           value: _selectedSemester,
                           items: _semesters.map((s) {
                             return DropdownMenuItem<int>(
-                              value: s['value'],
-                              child: Text(s['label']),
+                              value: s['id'],
+                              child: Text(s['name']),
                             );
                           }).toList(),
                           onChanged: (val) => setState(() => _selectedSemester = val),
