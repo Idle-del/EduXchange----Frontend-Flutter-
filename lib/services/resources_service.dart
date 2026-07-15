@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/model/resource_model.dart';
 import 'package:edu_xchange/services/api_service.dart';
-import 'package:http/http.dart' as http;
 
 class ResourceService {
   final baseUrl = ApiConstants.baseUrl;
@@ -30,8 +29,7 @@ class ResourceService {
     final url = Uri.parse('$baseUrl/resources/$resourceID/');
 
     try {
-      final response = await http.get(url);
-
+      final response = await ApiService().get(url);
       if (response.statusCode == 200) {
         return Resource.fromJson(jsonDecode(response.body));
       } else {
