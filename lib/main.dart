@@ -1,6 +1,7 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/login/register/login_screen.dart';
 import 'package:edu_xchange/profile/profile_edit.dart';
+import 'package:edu_xchange/screens/add_resource.dart';
 import 'package:edu_xchange/screens/main_screen.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:edu_xchange/utils/app_themes.dart';
@@ -53,6 +54,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/main', page: () => const MainScreen()),
         GetPage(name: '/profile/edit', page: () => const ProfileEdit()),
+        GetPage(name: '/add_resource', page: () => const CreateResourceScreen()),
         // Add other routes here
       ],
       theme: AppThemes.lightTheme,

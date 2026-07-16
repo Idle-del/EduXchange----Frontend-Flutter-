@@ -32,4 +32,63 @@ class ApiService {
 
     return response;
   }
+
+  Future<http.Response> post(Uri url, {Map<String, String>? headers, Object? body}) async {
+    String? token = await _tokenService.getAccessToken();
+
+    final response = await http.post(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        ...?headers,
+      },
+      body: body,
+    );
+
+    // Access token expired?
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tokenService.refreshAccessToken();
+
+      if (refreshed) {
+        token = await _tokenService.getAccessToken();
+
+        return await http.post(
+          url,
+          headers: {
+            "Authorization": "Bearer $token",
+            ...?headers,
+          },
+          body: body,
+        );
+      }
+    }
+
+    return response;
+  }
+
+    Future<http.StreamedResponse> multipartRequest({
+    required String method,
+    required Uri url,
+    required Future<http.MultipartRequest> Function(String token) buildRequest,
+  }) async {
+    String? token = await _tokenService.getAccessToken();
+
+    http.MultipartRequest request = await buildRequest(token!);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tokenService.refreshAccessToken();
+
+      if (refreshed) {
+        token = await _tokenService.getAccessToken();
+
+        request = await buildRequest(token!);
+
+        response = await request.send();
+      }
+    }
+
+    return response;
+  }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:edu_xchange/model/resource_model.dart';
+import 'package:edu_xchange/screens/add_resource.dart';
 import 'package:edu_xchange/screens/resource_detail_screen.dart';
 import 'package:edu_xchange/services/resources_service.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildFileThumbnail(Resource resource, bool isDark, double size) {
-    final label = resource.file != null ? _fileExtensionLabel(resource.file!) : null;
+    final label = resource.file != null
+        ? _fileExtensionLabel(resource.file!)
+        : null;
 
     return Container(
       width: size,
@@ -107,7 +110,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.description_outlined, color: _primaryColor, size: 28),
+          const Icon(
+            Icons.description_outlined,
+            color: _primaryColor,
+            size: 28,
+          ),
           if (label != null) ...[
             const SizedBox(height: 4),
             Text(
@@ -133,7 +140,11 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 14, color: isDark ? Colors.grey[500] : Colors.grey[600]),
+          Icon(
+            icon,
+            size: 14,
+            color: isDark ? Colors.grey[500] : Colors.grey[600],
+          ),
           const SizedBox(width: 6),
           Expanded(
             child: Text(
@@ -155,7 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDark ? const Color(0xFF0E1420) : const Color(0xFFF4F6F9),
+      backgroundColor: isDark
+          ? const Color(0xFF0E1420)
+          : const Color(0xFFF4F6F9),
       appBar: AppBar(
         backgroundColor: isDark ? const Color(0xFF0E1420) : Colors.white,
         elevation: 0,
@@ -174,199 +187,228 @@ class _HomeScreenState extends State<HomeScreen> {
       body: isLoading
           ? const Center(child: CircularProgressIndicator(color: _primaryColor))
           : _resources.isEmpty
-              ? Center(
-                  child: Text(
-                    "No resources available yet",
-                    style: TextStyle(
-                      color: isDark ? Colors.grey[500] : Colors.grey[600],
-                      fontSize: 15,
+          ? Center(
+              child: Text(
+                "No resources available yet",
+                style: TextStyle(
+                  color: isDark ? Colors.grey[500] : Colors.grey[600],
+                  fontSize: 15,
+                ),
+              ),
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: _resources.length,
+              itemBuilder: (context, index) {
+                final resource = _resources[index];
+                final hasPrice =
+                    resource.price != null && resource.price!.trim().isNotEmpty;
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 14),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF161D2B) : Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: isDark ? Colors.grey[850]! : Colors.grey[200]!,
+                      width: 1,
                     ),
-                  ),
-                )
-              : ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: _resources.length,
-                  itemBuilder: (context, index) {
-                    final resource = _resources[index];
-                    final hasPrice = resource.price != null && resource.price!.trim().isNotEmpty;
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 14),
-                      decoration: BoxDecoration(
-                        color: isDark ? const Color(0xFF161D2B) : Colors.white,
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(
-                          color: isDark ? Colors.grey[850]! : Colors.grey[200]!,
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(isDark ? 0.3 : 0.04),
-                            blurRadius: 10,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(isDark ? 0.3 : 0.04),
+                        blurRadius: 10,
+                        offset: const Offset(0, 3),
                       ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(14),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ResourceDetailScreen(resourceId: resource.id),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(14),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildThumbnail(resource, isDark),
-                                const SizedBox(width: 14),
+                    ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(14),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                ResourceDetailScreen(resourceId: resource.id),
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildThumbnail(resource, isDark),
+                            const SizedBox(width: 14),
 
-                                /// Details
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                            /// Details
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              resource.title,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w700,
-                                                color: isDark ? Colors.white : Colors.black87,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                      Expanded(
+                                        child: Text(
+                                          resource.title,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w700,
+                                            color: isDark
+                                                ? Colors.white
+                                                : Colors.black87,
                                           ),
-                                          if (hasPrice) ...[
-                                            const SizedBox(width: 8),
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 4,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: _primaryColor.withOpacity(
-                                                  isDark ? 0.18 : 0.08,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8),
-                                              ),
-                                              child: Text(
-                                                "Rs. ${resource.price}",
-                                                style: const TextStyle(
-                                                  fontSize: 12.5,
-                                                  fontWeight: FontWeight.w700,
-                                                  color: _primaryColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-
-                                      const SizedBox(height: 6),
-
-                                      Wrap(
-                                        spacing: 6,
-                                        runSpacing: 6,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 3,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: _accentColor.withOpacity(
-                                                isDark ? 0.18 : 0.08,
-                                              ),
-                                              borderRadius: BorderRadius.circular(6),
-                                            ),
-                                            child: Text(
-                                              resource.categoryName,
-                                              style: const TextStyle(
-                                                fontSize: 11.5,
-                                                fontWeight: FontWeight.w600,
-                                                color: _accentColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 8,
-                                              vertical: 3,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: isDark
-                                                  ? Colors.grey[850]
-                                                  : Colors.grey[200],
-                                              borderRadius: BorderRadius.circular(6),
-                                            ),
-                                            child: Text(
-                                              resource.type,
-                                              style: TextStyle(
-                                                fontSize: 11.5,
-                                                fontWeight: FontWeight.w600,
-                                                color: isDark
-                                                    ? Colors.grey[300]
-                                                    : Colors.grey[700],
-                                              ),
-                                            ),
-                                          ),
-                                          if (resource.semesterName != null &&
-                                              resource.semesterName!.trim().isNotEmpty)
-                                            Container(
-                                              padding: const EdgeInsets.symmetric(
-                                                horizontal: 8,
-                                                vertical: 3,
-                                              ),
-                                              decoration: BoxDecoration(
-                                                color: isDark
-                                                    ? Colors.grey[850]
-                                                    : Colors.grey[200],
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Text(
-                                                resource.semesterName!,
-                                                style: TextStyle(
-                                                  fontSize: 11.5,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: isDark
-                                                      ? Colors.grey[300]
-                                                      : Colors.grey[700],
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-
-                                      ..._buildNonNullWidgets([
-                                        _buildDetailRow(
-                                          Icons.person_outline,
-                                          "By ${resource.uploadedByName}",
-                                          isDark,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                      ]),
+                                      ),
+                                      if (hasPrice) ...[
+                                        const SizedBox(width: 8),
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: _primaryColor.withOpacity(
+                                              isDark ? 0.18 : 0.08,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "Rs. ${resource.price}",
+                                            style: const TextStyle(
+                                              fontSize: 12.5,
+                                              fontWeight: FontWeight.w700,
+                                              color: _primaryColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ],
                                   ),
-                                ),
-                              ],
+
+                                  const SizedBox(height: 6),
+
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 6,
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: _accentColor.withOpacity(
+                                            isDark ? 0.18 : 0.08,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          resource.categoryName,
+                                          style: const TextStyle(
+                                            fontSize: 11.5,
+                                            fontWeight: FontWeight.w600,
+                                            color: _accentColor,
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8,
+                                          vertical: 3,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: isDark
+                                              ? Colors.grey[850]
+                                              : Colors.grey[200],
+                                          borderRadius: BorderRadius.circular(
+                                            6,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          resource.type,
+                                          style: TextStyle(
+                                            fontSize: 11.5,
+                                            fontWeight: FontWeight.w600,
+                                            color: isDark
+                                                ? Colors.grey[300]
+                                                : Colors.grey[700],
+                                          ),
+                                        ),
+                                      ),
+                                      if (resource.semesterName != null &&
+                                          resource.semesterName!
+                                              .trim()
+                                              .isNotEmpty)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 3,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: isDark
+                                                ? Colors.grey[850]
+                                                : Colors.grey[200],
+                                            borderRadius: BorderRadius.circular(
+                                              6,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            resource.semesterName!,
+                                            style: TextStyle(
+                                              fontSize: 11.5,
+                                              fontWeight: FontWeight.w600,
+                                              color: isDark
+                                                  ? Colors.grey[300]
+                                                  : Colors.grey[700],
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+
+                                  ..._buildNonNullWidgets([
+                                    _buildDetailRow(
+                                      Icons.person_outline,
+                                      "By ${resource.uploadedByName}",
+                                      isDark,
+                                    ),
+                                  ]),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                );
+              },
+            ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          print('Navigating to Add Resource Screen');
+          final result = await Navigator.push(context, MaterialPageRoute(
+            builder: (_) => const CreateResourceScreen(),
+          ));
+
+          if (result == true) {
+            loadResources();
+            print('Resource added successfully, refreshing list.');
+          }
+        },
+        backgroundColor: _primaryColor,
+        child: const Icon(Icons.add),
+      ),
     );
   }
 

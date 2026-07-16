@@ -11,28 +11,26 @@ import 'package:get/get.dart';
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
 
+  final List<Widget> pages = const [
+    HomeScreen(),
+    SizedBox(),
+    SizedBox(),
+    ProfilePage(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     final NavigationController navigationController =
         Get.put(NavigationController());
 
-    // One instance of each tab. IndexedStack keeps all of them alive in
-    // memory (so scroll position, loaded data, etc. survive tab switches)
-    // and just changes which one is visible.
-    final List<Widget> pages = const [
-      HomeScreen(),
-      HomeScreen(),
-      HomeScreen(),
-      ProfilePage(),
-      ];
-
     return Scaffold(
-      body: Obx(
-        () => IndexedStack(
-          index: navigationController.currentIndex.value,
-          children: pages,
-        ),
-      ),
+      // body: Obx(
+      //   () => IndexedStack(
+      //     index: navigationController.currentIndex.value,
+      //     children: pages,
+      //   ),
+      // ),
+      body: Obx(() => pages[navigationController.currentIndex.value]),
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }
