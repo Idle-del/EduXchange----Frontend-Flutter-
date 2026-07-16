@@ -91,4 +91,68 @@ class ApiService {
 
     return response;
   }
+
+  Future<http.Response> put(Uri url, {Map<String, String>? headers, Object? body}) async {
+    String? token = await _tokenService.getAccessToken();
+
+    final response = await http.put(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        ...?headers,
+      },
+      body: body,
+    );
+
+    // Access token expired?
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tokenService.refreshAccessToken();
+
+      if (refreshed) {
+        token = await _tokenService.getAccessToken();
+
+        return await http.put(
+          url,
+          headers: {
+            "Authorization": "Bearer $token",
+            ...?headers,
+          },
+          body: body,
+        );
+      }
+    }
+
+    return response;
+  }
+
+  Future<http.Response> delete(Uri url, {Map<String, String>? headers}) async {
+    String? token = await _tokenService.getAccessToken();
+
+    final response = await http.delete(
+      url,
+      headers: {
+        "Authorization": "Bearer $token",
+        ...?headers,
+      },
+    );
+
+    // Access token expired?
+    if (response.statusCode == 401 || response.statusCode == 403) {
+      final refreshed = await _tokenService.refreshAccessToken();
+
+      if (refreshed) {
+        token = await _tokenService.getAccessToken();
+
+        return await http.delete(
+          url,
+          headers: {
+            "Authorization": "Bearer $token",
+            ...?headers,
+          },
+        );
+      }
+    }
+
+    return response;
+  }
 }

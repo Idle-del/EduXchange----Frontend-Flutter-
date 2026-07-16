@@ -3,6 +3,7 @@ import 'package:edu_xchange/login/register/login_screen.dart';
 import 'package:edu_xchange/profile/profile_edit.dart';
 import 'package:edu_xchange/screens/add_resource.dart';
 import 'package:edu_xchange/screens/main_screen.dart';
+import 'package:edu_xchange/screens/manage_resources.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:edu_xchange/utils/app_themes.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/main', page: () => const MainScreen()),
         GetPage(name: '/profile/edit', page: () => const ProfileEdit()),
         GetPage(name: '/add_resource', page: () => const CreateResourceScreen()),
+        GetPage(name: '/manage_resources', page: () => const ManageResources()),
         // Add other routes here
       ],
       theme: AppThemes.lightTheme,

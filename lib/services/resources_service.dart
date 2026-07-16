@@ -21,10 +21,6 @@ class ResourceService {
   }) async {
     final url = Uri.parse('$baseUrl/resources/');
 
-    print(
-      'Creating resource with title: $title, description: $description, category: $category, type: $type, semester: $semester, price: $price',
-    );
-
     final response = await ApiService().multipartRequest(
       method: 'POST',
       url: url,
@@ -70,9 +66,6 @@ class ResourceService {
       },
     );
 
-    print('Response status code: ${response.statusCode}');
-    final responseBody = await response.stream.bytesToString();
-    print('Response body: $responseBody');
     if (response.statusCode != 201) {
       final error = await response.stream.bytesToString();
       throw Exception('Failed to create resource: $error');
@@ -94,7 +87,7 @@ class ResourceService {
         throw Exception('Failed to load resources');
       }
     } catch (e) {
-      return [];
+      throw Exception('Error fetching resources: $e');
     }
   }
 
@@ -110,6 +103,36 @@ class ResourceService {
       }
     } catch (e) {
       throw Exception('Error fetching resource detail: $e');
+    }
+  }
+
+  Future<List<Resource>> fetchUserResources() async {
+    final url = Uri.parse('$baseUrl/resources/user/');
+    try {
+      final response = await ApiService().get(url);
+      if (response.statusCode == 200) {
+        final List jsonData = jsonDecode(response.body);
+
+        return jsonData.map((e) => Resource.fromJson(e)).toList();
+      } else {
+        throw Exception('Failed to load user resources');
+      }
+    } catch (e) {
+      throw Exception('Error fetching user resources: $e');
+    }
+  }
+
+  Future<void> deleteResource(int resourceID) async {
+    final url = Uri.parse('$baseUrl/resources/$resourceID/');
+
+    try {
+      final response = await ApiService().delete(url);
+
+      if (response.statusCode != 204) {
+        throw Exception('Failed to delete resource');
+      }
+    } catch (e) {
+      throw Exception('Error deleting resource: $e');
     }
   }
 }
