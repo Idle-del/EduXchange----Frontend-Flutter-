@@ -4,6 +4,7 @@ import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/controller/theme_controller.dart';
 import 'package:edu_xchange/model/user_model.dart';
 import 'package:edu_xchange/profile/profile_edit.dart';
+import 'package:edu_xchange/profile/view_profile.dart';
 import 'package:edu_xchange/services/profile_service.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:flutter/material.dart';
@@ -45,21 +46,44 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _logout() {
-    Get.defaultDialog(
-      title: 'Logout',
-      middleText: 'Are you sure you want to logout?',
-      textCancel: 'Cancel',
-      textConfirm: 'Logout',
-      confirmTextColor: Colors.white,
-      onConfirm: () async {
-        await TokenService().logout();
+    // Get.defaultDialog(
+    //   title: 'Logout',
+    //   middleText: 'Are you sure you want to logout?',
+    //   textCancel: 'Cancel',
+    //   textConfirm: 'Logout',
+    //   confirmTextColor: Colors.white,
+    //   onConfirm: () async {
+    //     await TokenService().logout();
 
-        if (Get.isRegistered<NavigationController>()) {
-          Get.delete<NavigationController>();
-        }
-        Get.offAllNamed('/login');
-      },
-    );
+    //     if (Get.isRegistered<NavigationController>()) {
+    //       Get.delete<NavigationController>();
+    //     }
+    //     Get.offAllNamed('/login');
+    //   },
+    // );
+    showDialog(context: context, builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await TokenService().logout();
+
+              if (Get.isRegistered<NavigationController>()) {
+                Get.delete<NavigationController>();
+              }
+              Get.offAllNamed('/login');
+            },
+            child: const Text('Logout', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildDetailTile(
@@ -192,22 +216,34 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: _primaryColor.withOpacity(
-                            isDark ? 0.18 : 0.08,
+                        GestureDetector(
+                          onTap: () {
+                            if (userProfile?.profilePicture != null && userProfile!.profilePicture!.isNotEmpty) {
+                              Get.to(
+                                () => ViewProfileImage(
+                                  imageUrl: userProfile!.profilePicture!,
+                                  isDark: isDark,
+                                ),
+                              );
+                            }
+                          },
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: _primaryColor.withOpacity(
+                              isDark ? 0.18 : 0.08,
+                            ),
+                            backgroundImage:
+                                userProfile?.profilePicture?.isNotEmpty == true
+                                ? NetworkImage(userProfile!.profilePicture!)
+                                : null,
+                            child: userProfile?.profilePicture == null
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 50,
+                                    color: _primaryColor,
+                                  )
+                                : null,
                           ),
-                          backgroundImage:
-                              userProfile?.profilePicture?.isNotEmpty == true
-                              ? NetworkImage(userProfile!.profilePicture!)
-                              : null,
-                          child: userProfile?.profilePicture == null
-                              ? const Icon(
-                                  Icons.person,
-                                  size: 50,
-                                  color: _primaryColor,
-                                )
-                              : null,
                         ),
                         const SizedBox(height: 14),
                         Text(
@@ -287,6 +323,44 @@ class _ProfilePageState extends State<ProfilePage> {
                     userProfile?.semesterName ?? 'N/A',
                     isDark,
                   ),
+
+                  const SizedBox(height: 20),
+
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/manage_resources');
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: isDark ? const Color(0xFF161D2B) : Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: isDark ? Colors.grey[850]! : Colors.grey[200]!,
+                          width: 1,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('My Resources',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: isDark ? Colors.white : Colors.black87,
+                              )),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16,
+                            color: isDark ? Colors.grey[400] : Colors.grey[600],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  
 
                   const SizedBox(height: 80),
                 ],
