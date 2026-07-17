@@ -6,10 +6,10 @@ class Resource {
   final String? file;
   final String? image;
   final List<ResourceImage> extraImages;
-  // final int category;
+  final int? category;
   final String categoryName;
-  // final int? uploadedBy;
-  // final int? semester;
+  final int? uploadedBy;
+  final int? semester;
   final String? semesterName;
   final String uploadedByName;
   // final DateTime createdAt;
@@ -25,6 +25,9 @@ class Resource {
     this.file,
     this.image,
     required this.extraImages,
+    this.category,
+    this.uploadedBy,
+    this.semester,
     required this.categoryName,
     this.semesterName,
     required this.uploadedByName,
@@ -43,10 +46,10 @@ class Resource {
       extraImages: (json['extra_images'] as List)
           .map((e) => ResourceImage.fromJson(e))
           .toList(),
-      // category: json['category'],
+      category: json['category'],
       categoryName: json['category_name'],
-      // uploadedBy: json['uploaded_by'],
-      // semester: json['semester'],
+      uploadedBy: json['uploaded_by'],
+      semester: json['semester'],
       semesterName: json['semester_name'],
       uploadedByName: json['uploaded_by_name'],
       // createdAt: DateTime.parse(json['created_at']),
@@ -61,15 +64,9 @@ class ResourceImage {
   final int id;
   final String image;
 
-  ResourceImage({
-    required this.id,
-    required this.image,
-  });
+  ResourceImage({required this.id, required this.image});
 
   factory ResourceImage.fromJson(Map<String, dynamic> json) {
-    return ResourceImage(
-      id: json['id'],
-      image: json['image'],
-    );
+    return ResourceImage(id: json['id'], image: json['image']);
   }
 }

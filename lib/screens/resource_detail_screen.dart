@@ -108,7 +108,8 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
             child: PageView.builder(
               controller: _heroPageController,
               itemCount: allImages.length,
-              onPageChanged: (index) => setState(() => _currentHeroPage = index),
+              onPageChanged: (index) =>
+                  setState(() => _currentHeroPage = index),
               itemBuilder: (context, index) {
                 return Image.network(
                   allImages[index],
@@ -139,7 +140,10 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.black.withOpacity(0), Colors.black.withOpacity(0.45)],
+                colors: [
+                  Colors.black.withOpacity(0),
+                  Colors.black.withOpacity(0.45),
+                ],
               ),
             ),
           ),
@@ -160,7 +164,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                   width: isActive ? 18 : 6,
                   height: 6,
                   decoration: BoxDecoration(
-                    color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+                    color: isActive
+                        ? Colors.white
+                        : Colors.white.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(3),
                   ),
                 );
@@ -362,8 +368,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color:
-                                          isDark ? Colors.white : Colors.black87,
+                                      color: isDark
+                                          ? Colors.white
+                                          : Colors.black87,
                                     ),
                                   ),
                                 ),
@@ -412,8 +419,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                                     width: 7,
                                     height: 7,
                                     decoration: BoxDecoration(
-                                      color:
-                                          isAvailable ? Colors.green : Colors.red,
+                                      color: isAvailable
+                                          ? Colors.green
+                                          : Colors.red,
                                       shape: BoxShape.circle,
                                     ),
                                   ),
@@ -458,7 +466,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
 
                             const SizedBox(height: 16),
                             Divider(
-                              color: isDark ? Colors.grey[850] : Colors.grey[300],
+                              color: isDark
+                                  ? Colors.grey[850]
+                                  : Colors.grey[300],
                               height: 1,
                             ),
                             const SizedBox(height: 16),
@@ -469,8 +479,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                                 Icon(
                                   Icons.person_outline,
                                   size: 16,
-                                  color:
-                                      isDark ? Colors.grey[500] : Colors.grey[600],
+                                  color: isDark
+                                      ? Colors.grey[500]
+                                      : Colors.grey[600],
                                 ),
                                 const SizedBox(width: 6),
                                 Text(
@@ -495,8 +506,9 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                               style: TextStyle(
                                 fontSize: 14.5,
                                 height: 1.5,
-                                color:
-                                    isDark ? Colors.grey[300] : Colors.grey[800],
+                                color: isDark
+                                    ? Colors.grey[300]
+                                    : Colors.grey[800],
                               ),
                             ),
 

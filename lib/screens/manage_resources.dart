@@ -2,6 +2,7 @@
 
 import 'package:edu_xchange/model/resource_model.dart';
 import 'package:edu_xchange/screens/resource_detail_screen.dart';
+import 'package:edu_xchange/screens/resource_edit.dart';
 import 'package:edu_xchange/services/resources_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,7 +53,13 @@ class _ManageResourcesState extends State<ManageResources> {
   }
 
   void _editResource(Resource resource) {
-    // Get.toNamed('/edit_resource', arguments: {'resource': resource});
+    () async {
+      final updated = await Get.to(() => ResourceEdit(resource: resource));
+
+      if (updated == true) {
+        loadResources();
+      }
+    }();
   }
 
   void _deleteResource(Resource resource) {

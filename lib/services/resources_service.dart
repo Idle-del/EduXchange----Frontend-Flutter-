@@ -122,6 +122,87 @@ class ResourceService {
     }
   }
 
+  Future<bool> updateResource({
+    required String resourceID,
+    required String? title,
+    required String? description,
+    int? semester,
+    int? category,
+    String? status,
+    String? price,
+    File? image,
+    File? file,
+    List<File>? uploadedImages,
+  }) async {
+    final url = Uri.parse('$baseUrl/resources/$resourceID/');
+
+    try {
+      final response = await ApiService().multipartRequest(
+        method: 'PATCH',
+        url: url,
+        buildRequest: (token) async {
+          final request = http.MultipartRequest('PATCH', url);
+
+          request.headers['Authorization'] = 'Bearer $token';
+
+          request.fields['title'] = title!;
+          request.fields['description'] = description!;
+
+          if (semester != null) {
+            request.fields['semester'] = semester.toString();
+          }
+
+          if (category != null) {
+            request.fields['category'] = category.toString();
+          }
+          if (status != null) {
+            request.fields['status'] = status;
+          }
+
+          if (price != null) {
+            request.fields['price'] = price;
+          }
+
+          if (image != null) {
+            request.files.add(
+              await http.MultipartFile.fromPath("image", image.path),
+            );
+          }
+
+          if (file != null) {
+            request.files.add(
+              await http.MultipartFile.fromPath("file", file.path),
+            );
+          }
+
+          if (uploadedImages != null && uploadedImages.isNotEmpty) {
+            for (final img in uploadedImages) {
+              request.files.add(
+                await http.MultipartFile.fromPath("uploaded_images", img.path),
+              );
+            }
+          }
+          return request;
+        },
+      );
+
+      return response.statusCode == 200;
+    } catch (e) {
+      throw Exception('Error updating resource: $e');
+    }
+  }
+
+  Future<bool> deleteImage(int imageId) async {
+    final url = Uri.parse('$baseUrl/delete-image/$imageId/');
+
+    try {
+      final response = await ApiService().delete(url);
+      return response.statusCode == 204 || response.statusCode == 200;
+    } catch (e) {
+      throw Exception('Error deleting image: $e');
+    }
+  }
+
   Future<void> deleteResource(int resourceID) async {
     final url = Uri.parse('$baseUrl/resources/$resourceID/');
 
