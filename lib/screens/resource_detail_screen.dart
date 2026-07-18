@@ -2,8 +2,11 @@
 
 import 'package:edu_xchange/gallery/full_screen_gallery.dart';
 import 'package:edu_xchange/model/resource_model.dart';
+import 'package:edu_xchange/screens/chat_screen.dart';
 import 'package:edu_xchange/services/resources_service.dart';
+import 'package:edu_xchange/services/token_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ResourceDetailScreen extends StatefulWidget {
@@ -16,8 +19,10 @@ class ResourceDetailScreen extends StatefulWidget {
 
 class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
   final ResourceService _resourceService = ResourceService();
+  final TokenService _tokenService = TokenService();
   Resource? resource;
   bool isLoading = true;
+  int? _currentUserId;
 
   final PageController _heroPageController = PageController();
   int _currentHeroPage = 0;
@@ -29,12 +34,20 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
   void initState() {
     super.initState();
     loadResourceDetails();
+    _loadCurrentUserId();
   }
 
   @override
   void dispose() {
     _heroPageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _loadCurrentUserId() async {
+    final userId = await _tokenService.getUserId();
+    if (mounted) {
+      setState(() => _currentUserId = userId);
+    }
   }
 
   Future<void> loadResourceDetails() async {
@@ -305,7 +318,8 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
+    print("Logged in user: $_currentUserId");
+    print("Resource uploader: ${resource?.uploadedBy}");
     return Scaffold(
       backgroundColor: isDark
           ? const Color(0xFF0E1420)
@@ -528,6 +542,24 @@ class _ResourceDetailScreenState extends State<ResourceDetailScreen> {
                 );
               },
             ),
+      floatingActionButton:
+          resource != null &&
+              _currentUserId != null &&
+              resource!.uploadedBy != _currentUserId
+          ? FloatingActionButton(
+              onPressed: () {
+                Get.to(
+                  () => ChatScreen(
+                    currentUserId: _currentUserId!,
+                    receiverUserId: resource!.uploadedBy!,
+                    receiverUserName: resource!.uploadedByName,
+                  ),
+                );
+              },
+              backgroundColor: _primaryColor,
+              child: const Icon(Icons.chat_bubble_outline),
+            )
+          : null,
     );
   }
 }

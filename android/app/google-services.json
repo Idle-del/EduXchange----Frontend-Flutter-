@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "628682113871",
+    "project_id": "eduxchange-f725c",
+    "storage_bucket": "eduxchange-f725c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:628682113871:android:87b5a33ad75cdf01897b3a",
+        "android_client_info": {
+          "package_name": "com.example.edu_xchange"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHWwh6JWpgvCKfAXjW1VSsNyq3vX5i4so"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

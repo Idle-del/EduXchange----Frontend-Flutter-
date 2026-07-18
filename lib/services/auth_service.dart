@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final baseUrl = ApiConstants.baseUrl;
@@ -70,17 +69,10 @@ class AuthService {
 
       if (response.statusCode == 200 && json['access'] != null) {
         final tokenService = TokenService();
-        final prefs = await SharedPreferences.getInstance();
 
         await tokenService.saveTokens(json['access'], json['refresh']);
 
-        await prefs.setInt('user_id', json['id']);
-        await prefs.setString('user_email', json['email']);
-        await prefs.setString('first_name', json['first_name']);
-        await prefs.setString('last_name', json['last_name']);
-        await prefs.setString('bio', json['bio'] ?? '');
-        await prefs.setString('department', json['department'] ?? '');
-        await prefs.setInt('semester', json['semester'] ?? 0);
+        await tokenService.saveUserData(json);
 
         return true;
       }

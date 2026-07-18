@@ -1,4 +1,5 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
+import 'package:edu_xchange/firebase_options.dart';
 import 'package:edu_xchange/login/register/login_screen.dart';
 import 'package:edu_xchange/profile/profile_edit.dart';
 import 'package:edu_xchange/screens/add_resource.dart';
@@ -6,6 +7,7 @@ import 'package:edu_xchange/screens/main_screen.dart';
 import 'package:edu_xchange/screens/manage_resources.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:edu_xchange/utils/app_themes.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -23,21 +25,27 @@ import 'controller/theme_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await GetStorage.init();
+
+  Get.put(ThemeController());
+  Get.put(NavigationController());
+
   bool isLoggedIn = false;
 
   final tokenService = TokenService();
-
   final refreshToken = await tokenService.getRefreshToken();
 
-if (refreshToken != null) {
+  if (refreshToken != null) {
     isLoggedIn = await tokenService.refreshAccessToken();
-}
-  await GetStorage.init();
-  Get.put(ThemeController());
-  Get.put(NavigationController());
-  runApp(MyApp(
-    isLoggedIn: isLoggedIn,
-  ));
+  }
+
+  runApp(
+    MyApp(isLoggedIn: isLoggedIn),
+  );
 }
 
 class MyApp extends StatelessWidget {
