@@ -59,9 +59,9 @@ class _CustomBottomNavigationBarState
                 label: 'Home',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.explore_outlined),
-                activeIcon: Icon(Icons.explore),
-                label: 'Browse',
+                icon: Icon(Icons.chat_bubble_outline),
+                activeIcon: Icon(Icons.chat_bubble),
+                label: 'Chat',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.bookmark_border),
