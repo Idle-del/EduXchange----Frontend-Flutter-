@@ -1,7 +1,7 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
+import 'package:edu_xchange/profile/profile_page.dart';
 import 'package:edu_xchange/screens/chat_list.dart';
 import 'package:edu_xchange/screens/home_screen.dart';
-import 'package:edu_xchange/profile/profile_page.dart';
 import 'package:edu_xchange/widgets/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
