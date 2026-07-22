@@ -1,6 +1,5 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/model/chat_message.dart';
 import 'package:edu_xchange/model/user.dart';
 import 'package:edu_xchange/services/chat_service.dart';
@@ -237,7 +236,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   backgroundColor: _primaryColor.withOpacity(0.1),
                   backgroundImage: profilePicture != null
                       ? NetworkImage(
-                          '${ApiConstants.serverUrl}$profilePicture',
+                          profilePicture,
                         )
                       : null,
                   child: profilePicture == null

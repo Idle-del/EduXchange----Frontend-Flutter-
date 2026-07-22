@@ -3,7 +3,6 @@
 import 'package:edu_xchange/model/user.dart';
 import 'package:edu_xchange/screens/chat_screen.dart';
 import 'package:edu_xchange/services/user_service.dart';
-import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/services/chat_service.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:flutter/material.dart';
@@ -55,31 +54,13 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
     final difference = now.difference(timestamp).inDays;
     if (difference < 7) {
-      const weekdays = [
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat',
-        'Sun',
-      ];
+      const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       return weekdays[timestamp.weekday - 1];
     }
 
     const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'Jun',
-      'Jul',
-      'Aug',
-      'Sep',
-      'Oct',
-      'Nov',
-      'Dec',
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
     ];
     return '${months[timestamp.month - 1]} ${timestamp.day}';
   }
@@ -89,13 +70,17 @@ class _ChatListScreenState extends State<ChatListScreen> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     if (currentUserId == null) {
-      return const Center(child: CircularProgressIndicator(color: _primaryColor));
+      return const Center(
+        child: CircularProgressIndicator(color: _primaryColor),
+      );
     }
     return StreamBuilder(
       stream: _chatService.getChats(currentUserId!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: _primaryColor));
+          return const Center(
+            child: CircularProgressIndicator(color: _primaryColor),
+          );
         }
         if (snapshot.hasError) {
           return Center(
@@ -116,34 +101,46 @@ class _ChatListScreenState extends State<ChatListScreen> {
 
         final chats = snapshot.data!;
 
-        return ListView.separated(
-          itemCount: chats.length,
-          separatorBuilder: (context, index) => Divider(
-            height: 1,
-            indent: 78,
-            color: isDark ? Colors.grey[850] : Colors.grey[200],
+        // Fetch all other-user details together, so the list renders once
+        // instead of showing a per-row "Loading..." placeholder.
+        return FutureBuilder<List<User>>(
+          future: Future.wait(
+            chats.map((chat) {
+              final otherUserId = chat.participants.firstWhere(
+                (id) => id != currentUserId,
+              );
+              return _userService.getUserDetails(otherUserId);
+            }),
           ),
-          itemBuilder: (context, index) {
-            final chat = chats[index];
-            final otherUserId = chat.participants.firstWhere(
-              (id) => id != currentUserId,
-            );
-            final isUnread = chat.isUnreadFor(currentUserId!);
+          builder: (context, usersSnapshot) {
+            if (usersSnapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(color: _primaryColor),
+              );
+            }
 
-            return FutureBuilder<User>(
-              future: _userService.getUserDetails(otherUserId),
-              builder: (context, userSnapshot) {
-                if (userSnapshot.connectionState == ConnectionState.waiting) {
-                  return const ListTile(title: Text('Loading...'));
-                }
+            if (usersSnapshot.hasError) {
+              return Center(
+                child: Text(
+                  usersSnapshot.error.toString(),
+                  style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey[600]),
+                ),
+              );
+            }
 
-                if (userSnapshot.hasError) {
-                  return ListTile(
-                    title: Text(userSnapshot.error.toString()),
-                  );
-                }
+            final users = usersSnapshot.data!;
 
-                final user = userSnapshot.data!;
+            return ListView.separated(
+              itemCount: chats.length,
+              separatorBuilder: (context, index) => Divider(
+                height: 1,
+                indent: 78,
+                color: isDark ? Colors.grey[850] : Colors.grey[200],
+              ),
+              itemBuilder: (context, index) {
+                final chat = chats[index];
+                final user = users[index];
+                final isUnread = chat.isUnreadFor(currentUserId!);
 
                 return ListTile(
                   contentPadding: const EdgeInsets.symmetric(
@@ -154,9 +151,7 @@ class _ChatListScreenState extends State<ChatListScreen> {
                     radius: 25,
                     backgroundColor: _primaryColor.withOpacity(0.1),
                     backgroundImage: user.profilePicture != null
-                        ? NetworkImage(
-                            '${ApiConstants.serverUrl}${user.profilePicture}',
-                          )
+                        ? NetworkImage(user.profilePicture!)
                         : null,
                     child: user.profilePicture == null
                         ? const Icon(Icons.person, color: _primaryColor)
