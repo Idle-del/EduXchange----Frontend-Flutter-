@@ -4,10 +4,53 @@ import 'package:edu_xchange/config/api_constants.dart';
 import 'package:edu_xchange/services/token_service.dart';
 import 'package:http/http.dart' as http;
 
+/// Simple result wrapper so callers can show the real backend message
+/// instead of a generic "failed" string.
+class AuthResult {
+  final bool success;
+  final String message;
+
+  AuthResult(this.success, this.message);
+}
+
 class AuthService {
   final baseUrl = ApiConstants.baseUrl;
 
-  Future<bool> register(
+  /// Extracts a human-readable message from a Django REST Framework
+  /// error response body, e.g. {"email": ["user with this email already exists."]}
+  /// or {"detail": "..."} or {"non_field_errors": [...]}.
+  String _extractErrorMessage(String responseBody) {
+    try {
+      final decoded = jsonDecode(responseBody);
+
+      if (decoded is Map<String, dynamic>) {
+        if (decoded['detail'] != null) {
+          return decoded['detail'].toString();
+        }
+
+        // Collect all field errors into one readable string.
+        final messages = <String>[];
+        decoded.forEach((key, value) {
+          if (value is List) {
+            for (final item in value) {
+              messages.add(item.toString());
+            }
+          } else if (value is String) {
+            messages.add(value);
+          }
+        });
+
+        if (messages.isNotEmpty) {
+          return messages.join('\n');
+        }
+      }
+    } catch (_) {
+      // Fall through to generic message below.
+    }
+    return 'Registration failed';
+  }
+
+  Future<AuthResult> register(
     String email,
     String password,
     String firstName,
@@ -49,10 +92,15 @@ class AuthService {
       }
 
       var response = await request.send();
+      final responseBody = await response.stream.bytesToString();
 
-      return response.statusCode == 201 || response.statusCode == 200;
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return AuthResult(true, 'Registration successful');
+      }
+
+      return AuthResult(false, _extractErrorMessage(responseBody));
     } catch (e) {
-      return false;
+      return AuthResult(false, 'Something went wrong. Please check your connection and try again.');
     }
   }
 
@@ -102,7 +150,6 @@ class AuthService {
 
       request.fields['first_name'] = firstName;
       request.fields['last_name'] = lastName;
-      // request.fields['email'] = email;
 
       if (bio != null && bio.isNotEmpty) {
         request.fields['bio'] = bio;

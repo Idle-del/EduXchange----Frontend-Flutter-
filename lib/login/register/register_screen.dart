@@ -87,37 +87,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void register() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
-    setState(() => _isLoading = true);
-    final success = await _authService.register(
-      _emailController.text.trim(),
-      _passwordController.text.trim(),
-      _firstNameController.text.trim(),
-      _lastNameController.text.trim(),
-      bio: _bioController.text.trim().isNotEmpty
-          ? _bioController.text.trim()
-          : null,
-      department: _departmentController.text.trim().isNotEmpty
-          ? _departmentController.text.trim()
-          : null,
-      semester: _selectedSemester,
-      imageFile: _selectedImage,
-      // Assuming image is optional
-    );
-    setState(() => _isLoading = false);
-    if (success) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Registration successful! Please verify your email before logging in.")));
-      Get.offNamed('/login');
-    } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Registration failed")));
-    }
+  if (!_formKey.currentState!.validate()) {
+    return;
   }
+  setState(() => _isLoading = true);
+  final result = await _authService.register(
+    _emailController.text.trim(),
+    _passwordController.text.trim(),
+    _firstNameController.text.trim(),
+    _lastNameController.text.trim(),
+    bio: _bioController.text.trim().isNotEmpty
+        ? _bioController.text.trim()
+        : null,
+    department: _departmentController.text.trim().isNotEmpty
+        ? _departmentController.text.trim()
+        : null,
+    semester: _selectedSemester,
+    imageFile: _selectedImage,
+  );
+  setState(() => _isLoading = false);
+
+  if (!mounted) return;
+
+  if (result.success) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Registration successful! Please verify your email before logging in."),
+      ),
+    );
+    Get.offNamed('/login');
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result.message)),
+    );
+  }
+}
 
   Widget _buildTextField(
     String label,
