@@ -1,6 +1,7 @@
 import 'package:edu_xchange/controller/navigation_controller.dart';
 import 'package:edu_xchange/profile/profile_page.dart';
 import 'package:edu_xchange/screens/chat_list.dart';
+import 'package:edu_xchange/screens/favorite_screen.dart';
 import 'package:edu_xchange/screens/home_screen.dart';
 import 'package:edu_xchange/widgets/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MainScreen extends StatelessWidget {
   final List<Widget> pages = const [
     HomeScreen(),
     ChatListScreen(),
-    SizedBox(),
+    FavoritesScreen(),
     ProfilePage(),
   ];
 

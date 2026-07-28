@@ -64,9 +64,9 @@ class _CustomBottomNavigationBarState
                 label: 'Chat',
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.bookmark_border),
-                activeIcon: Icon(Icons.bookmark),
-                label: 'Saved',
+                icon: Icon(Icons.favorite_border),
+                activeIcon: Icon(Icons.favorite),
+                label: 'Favorites',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_outline),
