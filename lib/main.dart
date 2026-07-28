@@ -25,9 +25,7 @@ import 'controller/theme_controller.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await GetStorage.init();
 
@@ -43,9 +41,7 @@ Future<void> main() async {
     isLoggedIn = await tokenService.refreshAccessToken();
   }
 
-  runApp(
-    MyApp(isLoggedIn: isLoggedIn),
-  );
+  runApp(MyApp(isLoggedIn: isLoggedIn));
 }
 
 class MyApp extends StatelessWidget {
@@ -58,12 +54,15 @@ class MyApp extends StatelessWidget {
     final themeController = Get.find<ThemeController>();
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute:isLoggedIn ? '/main' : '/login',
+      initialRoute: isLoggedIn ? '/main' : '/login',
       getPages: [
         GetPage(name: '/login', page: () => const LoginScreen()),
         GetPage(name: '/main', page: () => const MainScreen()),
         GetPage(name: '/profile/edit', page: () => const ProfileEdit()),
-        GetPage(name: '/add_resource', page: () => const CreateResourceScreen()),
+        GetPage(
+          name: '/add_resource',
+          page: () => const CreateResourceScreen(),
+        ),
         GetPage(name: '/manage_resources', page: () => const ManageResources()),
         // Add other routes here
       ],
@@ -74,4 +73,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

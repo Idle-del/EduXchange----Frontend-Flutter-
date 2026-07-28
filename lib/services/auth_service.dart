@@ -100,7 +100,10 @@ class AuthService {
 
       return AuthResult(false, _extractErrorMessage(responseBody));
     } catch (e) {
-      return AuthResult(false, 'Something went wrong. Please check your connection and try again.');
+      return AuthResult(
+        false,
+        'Something went wrong. Please check your connection and try again.',
+      );
     }
   }
 
@@ -128,6 +131,54 @@ class AuthService {
       return false;
     } catch (e) {
       return false;
+    }
+  }
+
+  Future<String?> forgetPassword(String email) async {
+    try {
+      final url = Uri.parse('$baseUrl/auth/forget-password/');
+
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return null; // Success
+      }
+
+      return data['error'] ?? 'Something went wrong.';
+    } catch (e) {
+      return 'Unable to connect to the server.';
+    }
+  }
+
+  Future<String?> resetPassword({
+    required String token,
+    required String newPassword,
+  }) async {
+    try {
+      final url = Uri.parse('$baseUrl/auth/reset-password/$token/');
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'password': newPassword,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return null;
+      }
+
+      return data['error'] ?? 'Something went wrong.';
+    } catch (e) {
+      return 'Unable to connect to the server.';
     }
   }
 

@@ -1,4 +1,4 @@
-package com.example.edu_xchange
+package com.kiran.edu_xchange
 
 import io.flutter.embedding.android.FlutterActivity
 

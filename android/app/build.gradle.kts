@@ -13,7 +13,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.example.edu_xchange"
+    namespace = "com.kiran.edu_xchange"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -28,7 +28,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.edu_xchange"
+        applicationId = "com.kiran.edu_xchange"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

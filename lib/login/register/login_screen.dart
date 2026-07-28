@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
+import 'package:edu_xchange/login/register/forgot_password.dart';
 import 'package:edu_xchange/login/register/register_screen.dart';
 import 'package:edu_xchange/screens/main_screen.dart';
 import 'package:edu_xchange/services/auth_service.dart';
@@ -42,7 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
     bool isDarkMode,
     Widget? suffixIcon,
     String? Function(String?) validator,
-
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +118,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
-      backgroundColor: isDarkMode ? const Color(0xFF0E1420) : const Color(0xFFF4F6F9),
+      backgroundColor: isDarkMode
+          ? const Color(0xFF0E1420)
+          : const Color(0xFFF4F6F9),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 32.0),
@@ -149,7 +151,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 72,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        color: _primaryColor.withOpacity(isDarkMode ? 0.18 : 0.08),
+                        color: _primaryColor.withOpacity(
+                          isDarkMode ? 0.18 : 0.08,
+                        ),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -185,7 +189,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Email',
                       _emailController,
                       false,
-                      Icon(Icons.email_outlined, color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+                      Icon(
+                        Icons.email_outlined,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      ),
                       isDarkMode,
                       null,
                       (val) {
@@ -198,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return 'Please enter a valid email address';
                         }
                         return null;
-                      } // No suffix icon for email field
+                      }, // No suffix icon for email field
                     ),
 
                     const SizedBox(height: 4),
@@ -208,12 +215,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Password',
                       _passwordController,
                       true,
-                      Icon(Icons.lock_outline, color: isDarkMode ? Colors.grey[400] : Colors.grey[600]),
+                      Icon(
+                        Icons.lock_outline,
+                        color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                      ),
                       isDarkMode,
                       IconButton(
                         icon: Icon(
                           _isVisible ? Icons.visibility : Icons.visibility_off,
-                          color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
+                          color: isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.grey[600],
                           size: 20,
                         ),
                         onPressed: () {
@@ -230,9 +242,40 @@ class _LoginScreenState extends State<LoginScreen> {
                           return 'Password must be at least 8 characters';
                         }
                         return null;
-                      }
+                      },
                     ),
                     const SizedBox(height: 28),
+
+                    // Forgot password link
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const ForgotPasswordScreen(),
+                            ),
+                          );
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: const Text(
+                          'Forgot Password?',
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: _accentColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Login button
 
                     // Login button
                     ElevatedButton(
@@ -278,13 +321,17 @@ class _LoginScreenState extends State<LoginScreen> {
                           "Don't have an account? ",
                           style: TextStyle(
                             fontSize: 13.5,
-                            color: isDarkMode ? Colors.grey[400] : Colors.grey[700],
+                            color: isDarkMode
+                                ? Colors.grey[400]
+                                : Colors.grey[700],
                           ),
                         ),
                         GestureDetector(
                           onTap: () => Navigator.pushReplacement(
                             context,
-                            MaterialPageRoute(builder: (_) => const RegisterScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const RegisterScreen(),
+                            ),
                           ),
                           child: const Text(
                             'Sign Up',
